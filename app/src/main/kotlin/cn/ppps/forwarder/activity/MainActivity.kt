@@ -31,6 +31,7 @@ import cn.ppps.forwarder.fragment.AppListFragment
 import cn.ppps.forwarder.fragment.ClientFragment
 import cn.ppps.forwarder.fragment.FrpcFragment
 import cn.ppps.forwarder.fragment.LogsFragment
+import cn.ppps.forwarder.fragment.MsgFilterFragment
 import cn.ppps.forwarder.fragment.RulesFragment
 import cn.ppps.forwarder.fragment.SendersFragment
 import cn.ppps.forwarder.fragment.ServerFragment
@@ -75,14 +76,15 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
     private val POS_LOG = 0
     private val POS_RULE = 1
     private val POS_SENDER = 2
-    private val POS_SETTING = 3
-    private val POS_TASK = 5 //4为空行
-    private val POS_SERVER = 6
-    private val POS_CLIENT = 7
-    private val POS_FRPC = 8
-    private val POS_APPS = 9
-    private val POS_HELP = 11 //10为空行
-    private val POS_ABOUT = 12
+    private val POS_FILTER = 3
+    private val POS_SETTING = 4
+    private val POS_TASK = 6 //5为空行
+    private val POS_SERVER = 7
+    private val POS_CLIENT = 8
+    private val POS_FRPC = 9
+    private val POS_APPS = 10
+    private val POS_HELP = 12 //11为空行
+    private val POS_ABOUT = 13
     private var needToAppListFragment = false
 
     private lateinit var mTabLayout: TabLayout
@@ -159,6 +161,7 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_logs), R.drawable.selector_icon_tabbar_logs)
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_rules), R.drawable.selector_icon_tabbar_rules)
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_senders), R.drawable.selector_icon_tabbar_senders)
+        WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.msg_filter_title), R.drawable.selector_icon_tabbar_filter)
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_settings), R.drawable.selector_icon_tabbar_settings)
         WidgetUtils.setTabLayoutTextFont(mTabLayout)
         switchPage(LogsFragment::class.java)
@@ -170,6 +173,7 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
                     POS_LOG -> switchPage(LogsFragment::class.java)
                     POS_RULE -> switchPage(RulesFragment::class.java)
                     POS_SENDER -> switchPage(SendersFragment::class.java)
+                    POS_FILTER -> switchPage(MsgFilterFragment::class.java)
                     POS_SETTING -> switchPage(SettingsFragment::class.java)
                 }
             }
@@ -220,6 +224,7 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
                 createItemFor(POS_LOG).setChecked(true),
                 createItemFor(POS_RULE),
                 createItemFor(POS_SENDER),
+                createItemFor(POS_FILTER),
                 createItemFor(POS_SETTING),
                 SpaceItem(15),
                 createItemFor(POS_TASK),
@@ -253,7 +258,7 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
     override fun onItemSelected(position: Int) {
         needToAppListFragment = false
         when (position) {
-            POS_LOG, POS_RULE, POS_SENDER, POS_SETTING -> {
+            POS_LOG, POS_RULE, POS_SENDER, POS_FILTER, POS_SETTING -> {
                 val tab = mTabLayout.getTabAt(position)
                 tab?.select()
                 mSlidingRootNav.closeMenu()

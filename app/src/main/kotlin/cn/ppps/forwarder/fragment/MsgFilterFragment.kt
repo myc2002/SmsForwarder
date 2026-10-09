@@ -14,6 +14,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import cn.ppps.forwarder.R
+import cn.ppps.forwarder.activity.MainActivity
 import cn.ppps.forwarder.core.BaseFragment
 import cn.ppps.forwarder.databinding.FragmentMsgFilterBinding
 import cn.ppps.forwarder.entity.MsgFilterConfig
@@ -42,7 +43,9 @@ class MsgFilterFragment : BaseFragment<FragmentMsgFilterBinding?>() {
 
     override fun initTitle(): TitleBar? {
         val titleBar = super.initTitle()!!.setImmersive(false)
-        titleBar.setTitle("黑白名单")
+        titleBar.setLeftImageResource(R.drawable.ic_action_menu)
+        titleBar.setTitle(R.string.msg_filter_title)
+        titleBar.setLeftClickListener { (activity as? MainActivity)?.openMenu() }
         return titleBar
     }
 
