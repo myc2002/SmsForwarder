@@ -82,7 +82,7 @@ object MsgFilterUtils {
         synchronized(lock) {
             try {
                 val list = getLogs().toMutableList()
-                list.add(0, MsgFilterLog(System.currentTimeMillis(), msgInfo.type, msgInfo.from, matchContent(msgInfo).take(500), describe(result)))
+                list.add(0, MsgFilterLog(System.currentTimeMillis(), msgInfo.type, msgInfo.from, matchContent(msgInfo).take(500), describe(result), result.blocked))
                 while (list.size > MAX_LOGS) list.removeAt(list.size - 1)
                 logsJson = gson.toJson(list)
             } catch (e: Exception) {

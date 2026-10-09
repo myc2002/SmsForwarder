@@ -49,4 +49,5 @@ data class MsgFilterLog(
     var from: String = "",
     var content: String = "",
     var reason: String = "",
+    var blocked: Boolean = true,
 ) : Serializable

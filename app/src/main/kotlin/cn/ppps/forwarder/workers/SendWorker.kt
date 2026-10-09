@@ -53,6 +53,14 @@ class SendWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                 //【注意】卡槽id：-1=获取失败、0=卡槽1、1=卡槽2，但是 Rule 表里存的是 SIM1/SIM2
                 val simSlot = "SIM" + (msgInfo.simSlot + 1)
 
+                // 黑白名单（放在最前面，对规则转发和自动任务都生效）：白名单优先放行，命中黑名单则不转发
+                val filterResult = MsgFilterUtils.check(msgInfo)
+                Log.d(TAG, "MsgFilter: type=${msgInfo.type} from=${msgInfo.from} -> ${MsgFilterUtils.describe(filterResult)}")
+                if (filterResult.reason != "none") MsgFilterUtils.addLog(msgInfo, filterResult)
+                if (filterResult.blocked) {
+                    return@withContext Result.failure(workDataOf("send" to "blocked by msg filter"))
+                }
+
                 //自动任务处理逻辑
                 autoTaskProcess(msgInfo, msgInfoJson, simSlot)
 
@@ -81,14 +89,6 @@ class SendWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                         return@withContext Result.failure(workDataOf("send" to "failed"))
                     }
                     timestampPrev = timestamp
-                }
-
-                // 黑白名单：白名单优先放行，命中黑名单则不转发
-                val filterResult = MsgFilterUtils.check(msgInfo)
-                if (filterResult.reason != "none") Log.d(TAG, "MsgFilter: ${MsgFilterUtils.describe(filterResult)}")
-                if (filterResult.blocked) {
-                    MsgFilterUtils.addLog(msgInfo, filterResult)
-                    return@withContext Result.failure(workDataOf("send" to "blocked by msg filter"))
                 }
 
                 val ruleList: List<Rule> = Core.rule.getRuleList(msgInfo.type, 1, simSlot)

@@ -72,4 +72,20 @@ class MsgFilterMatcherTest {
         assertFalse(MsgFilterMatcher.check(c, "sms", "10086", "验证码").blocked)
         assertTrue(MsgFilterMatcher.check(c, "sms", "13800138000", "hello").blocked)
     }
+
+    /** 经 Gson 保存/读取后判断结果必须一致（模拟 SharedPreferences 存取） */
+    @Test
+    fun gsonRoundTrip() {
+        val gson = com.google.gson.Gson()
+        val original = cfg(b("10086"), w("验证码"))
+        val back = gson.fromJson(gson.toJson(original), MsgFilterConfig::class.java)
+        assertEquals(MsgFilterConfig.MODE_BLACK_WHITE, back.mode)
+        assertTrue(back.types.contains("sms"))
+        assertEquals(2, back.entries.size)
+        assertTrue(MsgFilterMatcher.check(back, "sms", "10086", "优惠").blocked)
+        assertFalse(MsgFilterMatcher.check(back, "sms", "10086", "验证码123").blocked)
+        // 新装用户默认配置：mode 关闭，types 默认含 sms
+        val def = gson.fromJson(gson.toJson(MsgFilterConfig()), MsgFilterConfig::class.java)
+        assertEquals(MsgFilterConfig.MODE_OFF, def.mode)
+    }
 }

@@ -199,10 +199,10 @@ class MsgFilterFragment : BaseFragment<FragmentMsgFilterBinding?>() {
     private fun showLogsDialog() {
         val logs = MsgFilterUtils.getLogs()
         val fmt = SimpleDateFormat("MM-dd HH:mm:ss", Locale.getDefault())
-        val text = if (logs.isEmpty()) "暂无拦截记录" else logs.joinToString("\n\n") {
-            "${fmt.format(Date(it.time))} [${it.type}] ${it.from}\n${it.reason}\n${it.content.take(120)}"
+        val text = if (logs.isEmpty()) "暂无记录（收到短信并命中名单后会显示在这里）" else logs.joinToString("\n\n") {
+            "${fmt.format(Date(it.time))} ${if (it.blocked) "✗不转发" else "✓转发"} [${it.type}] ${it.from}\n${it.reason}\n${it.content.take(120)}"
         }
-        MaterialDialog.Builder(requireContext()).title("拦截记录（最近 ${logs.size} 条）").content(text)
+        MaterialDialog.Builder(requireContext()).title("判断记录（最近 ${logs.size} 条）").content(text)
             .positiveText(R.string.action_back)
             .negativeText("清空")
             .onNegative { _, _ ->
