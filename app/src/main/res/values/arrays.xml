@@ -5,8 +5,8 @@
         <item>@string/menu_logs_step</item>
         <item>@string/menu_rules_step</item>
         <item>@string/menu_senders_step</item>
-        <item>@string/msg_filter_title</item>
         <item>@string/menu_settings_step</item>
+        <item>@string/msg_filter_title</item>
         <item />
         <item>@string/menu_tasks</item>
         <item>@string/menu_server</item>
@@ -22,8 +22,8 @@
         <item>@drawable/ic_menu_logs</item>
         <item>@drawable/ic_menu_rule</item>
         <item>@drawable/ic_menu_send</item>
-        <item>@drawable/ic_menu_filter</item>
         <item>@drawable/ic_menu_settings</item>
+        <item>@drawable/ic_menu_filter</item>
         <item />
         <item>@drawable/ic_menu_task</item>
         <item>@drawable/ic_menu_server</item>

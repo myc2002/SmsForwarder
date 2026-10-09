@@ -76,8 +76,8 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
     private val POS_LOG = 0
     private val POS_RULE = 1
     private val POS_SENDER = 2
-    private val POS_FILTER = 3
-    private val POS_SETTING = 4
+    private val POS_SETTING = 3
+    private val POS_FILTER = 4
     private val POS_TASK = 6 //5为空行
     private val POS_SERVER = 7
     private val POS_CLIENT = 8
@@ -161,7 +161,6 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_logs), R.drawable.selector_icon_tabbar_logs)
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_rules), R.drawable.selector_icon_tabbar_rules)
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_senders), R.drawable.selector_icon_tabbar_senders)
-        WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.msg_filter_title), R.drawable.selector_icon_tabbar_filter)
         WidgetUtils.addTabWithoutRipple(mTabLayout, getString(R.string.menu_settings), R.drawable.selector_icon_tabbar_settings)
         WidgetUtils.setTabLayoutTextFont(mTabLayout)
         switchPage(LogsFragment::class.java)
@@ -173,7 +172,6 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
                     POS_LOG -> switchPage(LogsFragment::class.java)
                     POS_RULE -> switchPage(RulesFragment::class.java)
                     POS_SENDER -> switchPage(SendersFragment::class.java)
-                    POS_FILTER -> switchPage(MsgFilterFragment::class.java)
                     POS_SETTING -> switchPage(SettingsFragment::class.java)
                 }
             }
@@ -224,8 +222,8 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
                 createItemFor(POS_LOG).setChecked(true),
                 createItemFor(POS_RULE),
                 createItemFor(POS_SENDER),
-                createItemFor(POS_FILTER),
                 createItemFor(POS_SETTING),
+                createItemFor(POS_FILTER),
                 SpaceItem(15),
                 createItemFor(POS_TASK),
                 createItemFor(POS_SERVER),
@@ -258,12 +256,13 @@ class MainActivity : BaseActivity<ActivityMainBinding?>(), DrawerAdapter.OnItemS
     override fun onItemSelected(position: Int) {
         needToAppListFragment = false
         when (position) {
-            POS_LOG, POS_RULE, POS_SENDER, POS_FILTER, POS_SETTING -> {
+            POS_LOG, POS_RULE, POS_SENDER, POS_SETTING -> {
                 val tab = mTabLayout.getTabAt(position)
                 tab?.select()
                 mSlidingRootNav.closeMenu()
             }
 
+            POS_FILTER -> openNewPage(MsgFilterFragment::class.java)
             POS_TASK -> openNewPage(TasksFragment::class.java)
             POS_SERVER -> openNewPage(ServerFragment::class.java)
             POS_CLIENT -> openNewPage(ClientFragment::class.java)
