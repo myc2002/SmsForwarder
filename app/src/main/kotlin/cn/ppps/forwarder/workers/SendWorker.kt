@@ -20,6 +20,7 @@ import cn.ppps.forwarder.utils.CHECK_SIM_SLOT_ALL
 import cn.ppps.forwarder.utils.DataProvider
 import cn.ppps.forwarder.utils.HistoryUtils
 import cn.ppps.forwarder.utils.Log
+import cn.ppps.forwarder.utils.MsgFilterUtils
 import cn.ppps.forwarder.utils.SendUtils
 import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.TASK_CONDITION_APP
@@ -80,6 +81,14 @@ class SendWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                         return@withContext Result.failure(workDataOf("send" to "failed"))
                     }
                     timestampPrev = timestamp
+                }
+
+                // 黑白名单：白名单优先放行，命中黑名单则不转发
+                val filterResult = MsgFilterUtils.check(msgInfo)
+                if (filterResult.reason != "none") Log.d(TAG, "MsgFilter: ${MsgFilterUtils.describe(filterResult)}")
+                if (filterResult.blocked) {
+                    MsgFilterUtils.addLog(msgInfo, filterResult)
+                    return@withContext Result.failure(workDataOf("send" to "blocked by msg filter"))
                 }
 
                 val ruleList: List<Rule> = Core.rule.getRuleList(msgInfo.type, 1, simSlot)

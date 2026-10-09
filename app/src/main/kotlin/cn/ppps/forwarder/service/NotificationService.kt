@@ -13,6 +13,7 @@ import cn.ppps.forwarder.core.Core
 import cn.ppps.forwarder.database.entity.Rule
 import cn.ppps.forwarder.entity.MsgInfo
 import cn.ppps.forwarder.utils.Log
+import cn.ppps.forwarder.utils.MsgFilterUtils
 import cn.ppps.forwarder.utils.PACKAGE_NAME
 import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.Worker
@@ -110,7 +111,7 @@ class NotificationService : NotificationListenerService() {
                 msgInfo.uid = sbn.uid
             }
             //TODO：自动消除通知（临时方案，重复查询换取准确性）
-            if (SettingUtils.enableCancelAppNotify) {
+            if (SettingUtils.enableCancelAppNotify && !MsgFilterUtils.check(msgInfo).blocked) {
                 val ruleList: List<Rule> = Core.rule.getRuleList(msgInfo.type, 1, "SIM0")
                 for (rule in ruleList) {
                     if (rule.checkMsg(msgInfo)) {

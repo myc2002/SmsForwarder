@@ -61,6 +61,14 @@ class RulesFragment : BaseFragment<FragmentRulesBinding?>(), RulePagingAdapter.O
                     .open(that)
             }
         })
+        titleBar!!.addAction(object : TitleBar.ImageAction(R.drawable.ic_filter) {
+            @SingleClick
+            override fun performAction(view: View) {
+                PageOption.to(MsgFilterFragment::class.java)
+                    .setNewActivity(true)
+                    .open(that)
+            }
+        })
         return titleBar
     }
 

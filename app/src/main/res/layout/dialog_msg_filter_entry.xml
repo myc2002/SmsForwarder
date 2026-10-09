@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:ignore="HardcodedText,Autofill,LabelFor">
+
+    <RadioGroup
+        android:id="@+id/rg_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_list_white"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="白名单（放行）" />
+
+        <RadioButton
+            android:id="@+id/rb_list_black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="黑名单（拦截）" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="号码 / 发送方（APP通知为包名）"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/sp_sender_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp" />
+
+    <EditText
+        android:id="@+id/et_sender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="一行一个，任一行命中即可；号码会自动去掉 +86、空格和横线"
+        android:inputType="textMultiLine"
+        android:minHeight="44dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="内容 / 关键字"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/sp_content_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp" />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="一行一个，任一行命中即可；不区分大小写"
+        android:inputType="textMultiLine"
+        android:minHeight="44dp"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/et_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="备注（可选）"
+        android:inputType="text"
+        android:minHeight="44dp"
+        android:textSize="14sp" />
+
+    <CheckBox
+        android:id="@+id/cb_enabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:checked="true"
+        android:text="启用此条" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="号码和内容两个条件需同时满足；选“不限”的条件忽略。"
+        android:textSize="12sp" />
+</LinearLayout>

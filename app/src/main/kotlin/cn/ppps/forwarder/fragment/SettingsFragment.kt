@@ -160,6 +160,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         editExtraAppList(binding!!.etAppList)
         //设置APP通知关键词黑名单
         editAppNotifyBlacklist(binding!!.etAppNotifyBlacklist)
+        //黑白名单入口
+        binding!!.layoutMsgFilter.setOnClickListener {
+            PageOption.to(MsgFilterFragment::class.java).setNewActivity(true).open(this)
+        }
         //自动过滤多久内重复消息
         binding!!.xsbDuplicateMessagesLimits.setDefaultValue(SettingUtils.duplicateMessagesLimits)
         binding!!.xsbDuplicateMessagesLimits.setOnSeekBarListener { _: XSeekBar?, newValue: Int ->
@@ -221,6 +225,18 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
         super.onResume()
         //初始化APP下拉列表
         initAppSpinner()
+        //黑白名单状态
+        try {
+            val cfg = cn.ppps.forwarder.utils.MsgFilterUtils.loadConfig()
+            val w = cfg.entries.count { it.isWhite }
+            val b = cfg.entries.size - w
+            binding!!.tvMsgFilterStatus.text = when (cfg.mode) {
+                cn.ppps.forwarder.entity.MsgFilterConfig.MODE_BLACK_WHITE -> "已启用：黑名单+白名单（白 $w / 黑 $b）"
+                cn.ppps.forwarder.entity.MsgFilterConfig.MODE_WHITE_ONLY -> "已启用：仅白名单（白 $w）"
+                else -> getString(R.string.msg_filter_tips)
+            }
+        } catch (_: Exception) {
+        }
     }
 
     override fun initListeners() {
