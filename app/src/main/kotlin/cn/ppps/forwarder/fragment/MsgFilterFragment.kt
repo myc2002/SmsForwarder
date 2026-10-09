@@ -60,6 +60,7 @@ class MsgFilterFragment : BaseFragment<FragmentMsgFilterBinding?>() {
         b.cbTypeApp.isChecked = config.types.contains("app")
         loading = false
         renderLists()
+        updateStatus()
     }
 
     override fun initListeners() {
@@ -99,6 +100,22 @@ class MsgFilterFragment : BaseFragment<FragmentMsgFilterBinding?>() {
 
     private fun save() {
         MsgFilterUtils.saveConfig(config)
+        updateStatus()
+    }
+
+    private fun updateStatus() {
+        val tv = binding?.tvStatus ?: return
+        val names = config.types.map { when (it) { "sms" -> "短信"; "call" -> "通话"; else -> "APP通知" } }
+        if (config.mode == MsgFilterConfig.MODE_OFF) {
+            tv.text = "当前：未开启（不会过滤任何消息）"
+            tv.setTextColor(Color.parseColor("#D93025"))
+        } else if (names.isEmpty()) {
+            tv.text = "当前：已开启，但没有勾选任何消息类型，不会过滤"
+            tv.setTextColor(Color.parseColor("#D93025"))
+        } else {
+            tv.text = "当前：已开启，对 ${names.joinToString("、")} 生效"
+            tv.setTextColor(Color.parseColor("#2E9E4F"))
+        }
     }
 
     private fun dp(v: Int): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()

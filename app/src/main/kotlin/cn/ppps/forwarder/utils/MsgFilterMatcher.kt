@@ -43,9 +43,8 @@ object MsgFilterMatcher {
      * @param content 用于匹配的内容（APP 通知为 标题+换行+内容）
      */
     fun check(config: MsgFilterConfig, type: String, from: String?, content: String?): MsgFilterResult {
-        if (config.mode == MsgFilterConfig.MODE_OFF || !config.types.contains(type)) {
-            return MsgFilterResult(false, "none")
-        }
+        if (config.mode == MsgFilterConfig.MODE_OFF) return MsgFilterResult(false, "off")
+        if (!config.types.contains(type)) return MsgFilterResult(false, "type")
         // 1. 白名单优先
         config.entries.firstOrNull { it.isWhite && matchKeyword(it.keyword, from, content) }?.let {
             return MsgFilterResult(false, "white", it)

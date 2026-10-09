@@ -17,6 +17,7 @@ object MsgFilterUtils {
     private const val MAX_LOGS = 200
     private val gson = Gson()
     private val lock = Any()
+    @Volatile private var lastError: String = ""
 
     private var configJson: String by SharedPreference(SP_MSG_FILTER_CONFIG, "")
     private var logsJson: String by SharedPreference(SP_MSG_FILTER_LOGS, "")
@@ -64,7 +65,8 @@ object MsgFilterUtils {
             MsgFilterMatcher.check(loadConfig(), msgInfo.type, msgInfo.from, matchContent(msgInfo))
         } catch (e: Exception) {
             Log.e(TAG, "check error: ${e.message}")
-            MsgFilterResult(false, "none")
+            lastError = e.toString()
+            MsgFilterResult(false, "error")
         }
     }
 
@@ -74,7 +76,10 @@ object MsgFilterUtils {
             "white" -> "命中白名单「$name」，转发"
             "black" -> "命中黑名单「$name」，不转发"
             "default" -> if (result.blocked) "未命中白名单（仅白名单模式）" else "未命中任何名单，正常转发"
-            else -> "黑白名单未启用或不适用于此类消息"
+            "off" -> "黑白名单总开关未开启，没有过滤"
+            "type" -> "黑白名单没有勾选这类消息（短信/通话/APP通知），没有过滤"
+            "error" -> "名单读取出错，没有过滤：$lastError"
+            else -> "没有过滤"
         }
     }
 

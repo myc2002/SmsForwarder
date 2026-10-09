@@ -63,7 +63,8 @@ class MsgFilterMatcherTest {
     @Test
     fun offAndTypes() {
         assertFalse(MsgFilterMatcher.check(cfg(b("10086"), mode = MsgFilterConfig.MODE_OFF), "sms", "10086", "x").blocked)
-        assertEquals("none", MsgFilterMatcher.check(cfg(b("10086")), "call", "10086", "x").reason)
+        assertEquals("type", MsgFilterMatcher.check(cfg(b("10086")), "call", "10086", "x").reason)
+        assertEquals("off", MsgFilterMatcher.check(cfg(b("10086"), mode = MsgFilterConfig.MODE_OFF), "sms", "10086", "x").reason)
     }
 
     @Test

@@ -56,7 +56,7 @@ class SendWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
                 // 黑白名单（放在最前面，对规则转发和自动任务都生效）：白名单优先放行，命中黑名单则不转发
                 val filterResult = MsgFilterUtils.check(msgInfo)
                 Log.d(TAG, "MsgFilter: type=${msgInfo.type} from=${msgInfo.from} -> ${MsgFilterUtils.describe(filterResult)}")
-                if (filterResult.reason != "none") MsgFilterUtils.addLog(msgInfo, filterResult)
+                MsgFilterUtils.addLog(msgInfo, filterResult)
                 if (filterResult.blocked) {
                     return@withContext Result.failure(workDataOf("send" to "blocked by msg filter"))
                 }

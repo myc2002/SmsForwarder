@@ -58,6 +58,7 @@ import cn.ppps.forwarder.utils.KEY_RULE_CLONE
 import cn.ppps.forwarder.utils.KEY_RULE_ID
 import cn.ppps.forwarder.utils.KEY_RULE_TYPE
 import cn.ppps.forwarder.utils.Log
+import cn.ppps.forwarder.utils.MsgFilterUtils
 import cn.ppps.forwarder.utils.PhoneUtils
 import cn.ppps.forwarder.utils.SENDER_LOGIC_ALL
 import cn.ppps.forwarder.utils.SENDER_LOGIC_UNTIL_FAIL
@@ -861,6 +862,14 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                 }
 
                 val msgInfo = MsgInfo(ruleType, etFrom.text.toString(), msg.toString(), Date(), simInfo, simSlot, subId, callTypeTest)
+                //黑白名单：和真实收到消息时一样先判断
+                val filterResult = MsgFilterUtils.check(msgInfo)
+                if (filterResult.blocked) {
+                    throw Exception("被黑白名单拦截，不会转发：" + MsgFilterUtils.describe(filterResult))
+                }
+                if (filterResult.reason == "off" || filterResult.reason == "type" || filterResult.reason == "error") {
+                    XToastUtils.info(MsgFilterUtils.describe(filterResult))
+                }
                 if (!rule.checkMsg(msgInfo)) {
                     throw Exception(getString(R.string.unmatched_rule))
                 }
