@@ -86,7 +86,7 @@ class MsgFilterFragment : BaseFragment<FragmentMsgFilterBinding?>() {
             }
             save()
         }
-        val typeListener = { _: View ->
+        val typeListener = View.OnClickListener {
             if (!loading) {
                 val types = mutableListOf<String>()
                 if (b.cbTypeSms.isChecked) types.add("sms")

@@ -235,7 +235,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding?>(), View.OnClickL
                 cn.ppps.forwarder.entity.MsgFilterConfig.MODE_WHITE_ONLY -> "已启用：仅白名单（白 $w）"
                 else -> getString(R.string.msg_filter_tips)
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
