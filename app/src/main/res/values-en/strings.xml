@@ -1244,5 +1244,5 @@
     <string name="invalid_bluetooth_mac_address">Bluetooth Mac Address is invalid, eg. AA:BB:CC:DD:EE:FF</string>
     <string name="auto_start_redmi"><![CDATA[RedMi: Authorization Management -> Self-Start Management -> Allow Apps to Self-Start]]></string>
     <string name="msg_filter_title">Block/Allow list</string>
-    <string name="msg_filter_tips">Sender + keyword matching: allow list first, then block list</string>
+    <string name="msg_filter_tips">Just add keywords: allow list first, then block list</string>
 </resources>

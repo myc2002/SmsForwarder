@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="?attr/xui_config_color_background"
     android:orientation="vertical"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText,Autofill,LabelFor">
 
     <androidx.core.widget.NestedScrollView style="@style/ScrollViewStyle">
 
@@ -21,43 +21,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="过滤模式"
-                    android:textStyle="bold" />
-
-                <RadioGroup
-                    android:id="@+id/rg_mode"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/rb_mode_off"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="关闭（不过滤，全部交给转发规则）" />
+                        android:layout_weight="1"
+                        android:text="启用黑白名单"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        android:id="@+id/rb_mode_black_white"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="黑名单 + 白名单（未命中任何名单则正常转发）" />
-
-                    <RadioButton
-                        android:id="@+id/rb_mode_white_only"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="仅白名单（只转发命中白名单的消息）" />
-                </RadioGroup>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="作用于"
-                    android:textStyle="bold" />
+                    <com.xuexiang.xui.widget.button.switchbutton.SwitchButton
+                        android:id="@+id/sb_enable"
+                        style="@style/SwitchButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,66 +72,106 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="判定顺序：① 命中白名单 → 放行；② 否则命中黑名单 → 拦截；③ 都没命中 → 按模式决定。\n每条名单的「号码」和「内容」条件需同时满足（不限的条件忽略）。\n例：黑名单「号码=10086」+ 白名单「号码=10086 且 内容包含 验证码」，10086 的其它短信全部屏蔽，含“验证码”的照常转发。\n通过黑白名单的消息仍需匹配“转发规则”才会发送。"
+                    android:text="只需填写关键字：号码或短信内容里包含它就算命中。\n白名单优先：命中白名单的一定转发，其次命中黑名单的不转发。"
                     android:textSize="@dimen/text_size_mini"
                     tools:ignore="SmallSp" />
             </LinearLayout>
 
-            <LinearLayout
-                style="@style/BarTitleStyle"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_white_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="白名单（优先放行）"
-                    android:textColor="#2E9E4F"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btn_add_white"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="36dp"
-                    android:text="＋ 添加" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_white"
+            <TextView
+                android:id="@+id/tv_white_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                android:text="白名单（一定转发）"
+                android:textColor="#2E9E4F"
+                android:textStyle="bold" />
 
             <LinearLayout
-                style="@style/BarTitleStyle"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_black_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="黑名单（拦截）"
-                    android:textColor="#D93025"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btn_add_black"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="36dp"
-                    android:text="＋ 添加" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_black"
+                style="@style/BarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_white"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="输入号码或关键字，如：验证码"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/btn_add_white"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_black_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="12dp"
+                android:text="黑名单（不转发）"
+                android:textColor="#D93025"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                style="@style/BarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_black"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="输入号码或关键字，如：10086"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/btn_add_black"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="添加" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -189,14 +211,6 @@
                     android:layout_weight="1"
                     android:text="导出" />
             </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="点击名单项编辑，长按删除。导出会把名单 JSON 复制到剪贴板；名单也会随“一键换新机”一起备份。"
-                android:textSize="@dimen/text_size_mini"
-                tools:ignore="SmallSp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

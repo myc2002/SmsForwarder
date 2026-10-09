@@ -34,19 +34,10 @@ object MsgFilterUtils {
             if (cfg.types == null) cfg.types = mutableListOf("sms")
             @Suppress("SENSELESS_COMPARISON")
             if (cfg.entries == null) cfg.entries = mutableListOf()
+            cfg.entries.removeAll { it.keyword == null || it.keyword.isBlank() }
             cfg.entries.forEach { e ->
                 @Suppress("SENSELESS_COMPARISON")
                 if (e.list == null) e.list = MsgFilterEntry.LIST_BLACK
-                @Suppress("SENSELESS_COMPARISON")
-                if (e.senderMode == null) e.senderMode = MsgFilterEntry.MODE_ANY
-                @Suppress("SENSELESS_COMPARISON")
-                if (e.contentMode == null) e.contentMode = MsgFilterEntry.MODE_ANY
-                @Suppress("SENSELESS_COMPARISON")
-                if (e.sender == null) e.sender = ""
-                @Suppress("SENSELESS_COMPARISON")
-                if (e.content == null) e.content = ""
-                @Suppress("SENSELESS_COMPARISON")
-                if (e.note == null) e.note = ""
             }
             cfg
         } catch (e: Exception) {
@@ -78,11 +69,10 @@ object MsgFilterUtils {
     }
 
     fun describe(result: MsgFilterResult): String {
-        val e = result.entry
-        val name = if (e == null) "" else (e.note.ifBlank { listOf(e.sender, e.content).filter { it.isNotBlank() }.joinToString(" / ").replace("\n", ",") })
+        val name = result.entry?.keyword ?: ""
         return when (result.reason) {
-            "white" -> "白名单放行：$name"
-            "black" -> "黑名单拦截：$name"
+            "white" -> "命中白名单「$name」，转发"
+            "black" -> "命中黑名单「$name」，不转发"
             "default" -> if (result.blocked) "未命中白名单（仅白名单模式）" else "未命中任何名单，正常转发"
             else -> "黑白名单未启用或不适用于此类消息"
         }

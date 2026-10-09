@@ -1246,5 +1246,5 @@
     <string name="invalid_bluetooth_mac_address">藍牙裝置MAC地址無效，例如：AA:BB:CC:DD:EE:FF</string>
     <string name="auto_start_redmi"><![CDATA[紅米手機：授權管理 -> 自啟動管理 -> 允許應用自啟動]]></string>
     <string name="msg_filter_title">黑白名單</string>
-    <string name="msg_filter_tips">號碼+關鍵字雙重匹配：白名單優先放行，黑名單攔截</string>
+    <string name="msg_filter_tips">填關鍵字即可，白名單優先轉發，黑名單不轉發</string>
 </resources>

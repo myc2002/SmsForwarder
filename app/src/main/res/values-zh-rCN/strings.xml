@@ -1245,5 +1245,5 @@
     <string name="invalid_bluetooth_mac_address">蓝牙设备MAC地址无效，例如：AA:BB:CC:DD:EE:FF</string>
     <string name="auto_start_redmi"><![CDATA[红米手机：授权管理 -> 自启动管理 -> 允许应用自启动]]></string>
     <string name="msg_filter_title">黑白名单</string>
-    <string name="msg_filter_tips">号码+关键字双重匹配：白名单优先放行，黑名单拦截</string>
+    <string name="msg_filter_tips">填关键字即可，白名单优先转发，黑名单不转发</string>
 </resources>
